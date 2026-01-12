@@ -33,8 +33,8 @@ class Company(Base):
     responsible = Column(String)
     company_type = Column(String)
     fund = Column(String)
-    business_model = Column(JSON)
-    constitution_location = Column(JSON)
+    business_model = Column(ARRAY(String))
+    constitution_location = Column(ARRAY(String))
     
     fast_tracks = relationship("FastTrack", back_populates="company")
 
