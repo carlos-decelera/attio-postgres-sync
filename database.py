@@ -4,7 +4,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Update this with your actual connection string
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5432/dbname")
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    print(f"✅ URL cargada correctamente. Empieza por: {DATABASE_URL[:15]}...")
+else:
+    print("❌ ERROR CRÍTICO: La variable DATABASE_URL está vacía o no se encuentra.")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
