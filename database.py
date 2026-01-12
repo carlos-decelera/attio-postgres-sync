@@ -73,6 +73,19 @@ class FastTrack(Base):
     red_flags_summary = Column(String)
     signal_comments = Column(String)
 
+    @validates('signals_evaluations')
+    def validate_json_empty(self, key, value):
+        if isinstance(value, dict) and not value:
+            return None
+        
+        if isinstance(value, list) and not value:
+            return None
+            
+        if isinstance(value, str) and not value.strip():
+            return None
+            
+        return value
+
     company = relationship("Company", back_populates="fast_tracks")
 
 def init_db():
