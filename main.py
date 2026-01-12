@@ -1,15 +1,21 @@
-import requests
+import os
+import uvicorn
 from fastapi import FastAPI, Request, Depends
 from sqlalchemy.orm import Session
-from database import SessionLocal, Company, FastTrack
+from database import SessionLocal, engine, Base
+from companies.models import Company
+from fast_tracks.models import FastTrack
 
 app = FastAPI()
 
+load_dotenv()
+
+ATTIO_TOKEN = os.getenv("ATTIO_TOKEN")
+COMPANY_OBJECT_ID = os.getenv("COMPANY_OBJECT_ID")
+LIST_ID = os.getenv("FAST_TRACK_LIST_ID")
+
 # Config
-ATTIO_TOKEN = "YOUR_ATTIO_TOKEN"
 HEADERS = {"Authorization": f"Bearer {ATTIO_TOKEN}"}
-COMPANY_OBJECT_ID = "74c77546-6a6f-4aab-9a19-536d8cfed976" # From Filter node
-LIST_ID = "c1b474e0-90cc-48c3-a98d-135da4a71db0"         # From Filter node
 
 def get_db():
     db = SessionLocal()
@@ -132,3 +138,13 @@ async def attio_webhook(request: Request, db: Session = Depends(get_db)):
         db.commit()
 
     return {"status": "success"}
+
+if __name__ == "__main__":
+    # Ensure tables are created on startup if they don't exist
+    Base.metadata.create_all(bind=engine)
+    
+    # Get port from environment variable (default to 8000 for local dev)
+    port = int(os.environ.get("PORT", 8000))
+    
+    # Run server on 0.0.0.0 to be accessible externally
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
