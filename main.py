@@ -36,7 +36,7 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
         # Si el cliente se desconecta, simplemente ignoramos la petición silenciosamente
         return {"status": "ignored", "reason": "client disconnected"}
     except Exception:
-        return {"status": "error", "reason": "invalid json"
+        return {"status": "error", "reason": "invalid json"}
     
     payload = await request.json()
     event = payload.get("events", [{}])[0]
