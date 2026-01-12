@@ -1,24 +1,24 @@
 import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, Column, String, Integer, DateTime, Boolean, JSON, ForeignKey, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 
-# Update this with your actual connection string
+load_dotenv()
+
 DATABASE_URL = os.getenv("DATABASE_URL")
-
-if DATABASE_URL:
-    print(f"✅ URL cargada correctamente. Empieza por: {DATABASE_URL[:15]}...")
-else:
-    print("❌ ERROR CRÍTICO: La variable DATABASE_URL está vacía o no se encuentra.")
+if DATABASE_URL and "localhost" in DATABASE_URL:
+    print("⚠️ Alerta: Estás intentando usar localhost en Railway.")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+# Modelo de Compañías (basado en tu n8n JSON)
 class Company(Base):
     __tablename__ = "companies"
     id = Column(Integer, primary_key=True, index=True)
-    id_attio = Column(String, unique=True, index=True) # Matching Column
+    id_attio = Column(String, unique=True, index=True)
     name = Column(String)
     domains = Column(String)
     created_at = Column(DateTime)
@@ -33,13 +33,16 @@ class Company(Base):
     responsible = Column(String)
     company_type = Column(String)
     fund = Column(String)
-    business_model = Column(JSON) # Array mapping
-    constitution_location = Column(JSON) # Array mapping
+    business_model = Column(JSON)
+    constitution_location = Column(JSON)
+    
+    fast_tracks = relationship("FastTrack", back_populates="company")
 
+# Modelo de Fast Tracks (basado en tu n8n JSON)
 class FastTrack(Base):
     __tablename__ = "fast_tracks"
     id = Column(Integer, primary_key=True, index=True)
-    entry_id = Column(String, unique=True, index=True) # Matching Column
+    entry_id = Column(String, unique=True, index=True)
     company_id = Column(Integer, ForeignKey("companies.id"))
     parent_record_id = Column(String)
     name = Column(String)
@@ -62,5 +65,7 @@ class FastTrack(Base):
     red_flags_summary = Column(String)
     signal_comments = Column(String)
 
-# Create tables
-Base.metadata.create_all(bind=engine)
+    company = relationship("Company", back_populates="fast_tracks")
+
+def init_db():
+    Base.metadata.create_all(bind=engine)
