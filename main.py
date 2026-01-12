@@ -30,6 +30,14 @@ def safe_get(data, key, path="value"):
 
 @app.post("/attio-to-postgres")
 async def webhook(request: Request, db: Session = Depends(get_db)):
+    try:
+        payload = await request.json()
+    except ClientDisconnect:
+        # Si el cliente se desconecta, simplemente ignoramos la petición silenciosamente
+        return {"status": "ignored", "reason": "client disconnected"}
+    except Exception:
+        return {"status": "error", "reason": "invalid json"
+    
     payload = await request.json()
     event = payload.get("events", [{}])[0]
     event_type = event.get("event_type", "")
