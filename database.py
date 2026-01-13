@@ -36,8 +36,10 @@ class Company(Base):
     fund = Column(String)
     business_model = Column(ARRAY(String))
     constitution_location = Column(ARRAY(String))
+    business_type = Column(ARRAY(String))
+    comments = Column(String)
 
-    @validates('business_model', 'constitution_location')
+    @validates('business_model', 'constitution_location', 'business_type')
     def empty_list_to_null(self, key, value):
         # Si el valor es una lista vacía o un string que representa una lista vacía, devuelve None
         if isinstance(value, list) and len(value) == 0:
