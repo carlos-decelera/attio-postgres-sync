@@ -63,6 +63,7 @@ async def process_attio_event(event: dict):
                 # Mapeo y limpieza de listas (Empty to NULL)
                 b_model = [i.get("option", {}).get("title") for i in vals.get("business_model_4", []) if i.get("option")]
                 c_loc = [i.get("option", {}).get("title") for i in vals.get("constitution_location_8", []) if i.get("option")]
+                b_type = [i.get("option", {}).get("title") for i in vals.get("business_type", []) if i.get("option")]
 
                 c_map = {
                     "id_attio": rid,
@@ -81,7 +82,9 @@ async def process_attio_event(event: dict):
                     "company_type": safe_get(vals, "company_type_4", "option"),
                     "fund": safe_get(vals, "fund_7", "option"),
                     "business_model": b_model if b_model else None,
-                    "constitution_location": c_loc if c_loc else None
+                    "constitution_location": c_loc if c_loc else None,
+                    "business_type": b_type if b_type else None,
+                    "comments": safe_get(vals, "comments")
                 }
 
                 existing = db.query(Company).filter(Company.id_attio == rid).first()
