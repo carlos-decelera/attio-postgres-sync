@@ -13,13 +13,19 @@ logger = logging.getLogger("AttioWorker")
 
 app = FastAPI()
 
-# Configuración
+# ====================================================
+# CONFIGURACION
+# ====================================================
+
 ATTIO_TOKEN = os.getenv("ATTIO_TOKEN")
 HEADERS = {"Authorization": f"Bearer {ATTIO_TOKEN}"}
 COMPANY_OBJ_ID = "74c77546-6a6f-4aab-9a19-536d8cfed976"
 LIST_ID = "c1b474e0-90cc-48c3-a98d-135da4a71db0"
 
-# --- UTILIDADES ---
+# =====================================================
+# UTILIDADES
+# =====================================================
+
 def safe_get(data, key, path="value"):
     try:
         val = data.get(key, [])
@@ -30,7 +36,10 @@ def safe_get(data, key, path="value"):
         return val[0].get("value")
     except: return None
 
-# --- TRABAJADOR EN SEGUNDO PLANO (LA LÓGICA PESADA) ---
+# =====================================================
+# TAREA DE POSTGRES
+# =====================================================
+
 async def process_attio_event(event: dict):
     """
     Esta función procesa la lógica de negocio sin bloquear el webhook.
@@ -42,7 +51,7 @@ async def process_attio_event(event: dict):
     try:
         async with httpx.AsyncClient(headers=HEADERS, timeout=10.0) as client:
             
-            # --- LÓGICA DE EMPRESAS ---
+            # =============== COMPANIES ========================
             if "record" in event_type and event_id_info.get("object_id") == COMPANY_OBJ_ID:
                 rid = event_id_info.get("record_id")
                 
@@ -95,7 +104,7 @@ async def process_attio_event(event: dict):
                 db.commit()
                 logger.info(f"✅ Empresa sincronizada: {rid}")
 
-            # --- LÓGICA DE FAST TRACKS ---
+            # =================== FAST TRACKS ==============================
             elif "entry" in event_type and event_id_info.get("list_id") == LIST_ID:
                 eid = event_id_info.get("entry_id")
                 
