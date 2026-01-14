@@ -73,6 +73,7 @@ async def process_attio_event(event: dict):
                 b_model = [i.get("option", {}).get("title") for i in vals.get("business_model_4", []) if i.get("option")]
                 c_loc = [i.get("option", {}).get("title") for i in vals.get("constitution_location_8", []) if i.get("option")]
                 b_type = [i.get("option", {}).get("title") for i in vals.get("business_type", []) if i.get("option")]
+                c_type = [i.get("option", {}).get("title") for i in vals.get("company_type_4", []) if i.get("option")]
                 stage = [i.get("option", {}).get("title") for i in vals.get("stage", []) if i.get("option")]
 
                 c_map = {
@@ -89,7 +90,7 @@ async def process_attio_event(event: dict):
                     "reference_explanation": safe_get(vals, "reference_explanation"),
                     "date_sourced": safe_get(vals, "date_sourced"),
                     "responsible": safe_get(vals, "responsible", "option"),
-                    "company_type": safe_get(vals, "company_type_4", "option"),
+                    "company_type": c_type if c_type else None,
                     "fund": safe_get(vals, "fund_7", "option"),
                     "business_model": b_model if b_model else None,
                     "constitution_location": c_loc if c_loc else None,

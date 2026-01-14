@@ -32,14 +32,14 @@ class Company(Base):
     reference_explanation = Column(String)
     date_sourced = Column(DateTime)
     responsible = Column(String)
-    company_type = Column(String)
+    company_type = Column(ARRAY(String))
     fund = Column(String)
     business_model = Column(ARRAY(String))
     constitution_location = Column(ARRAY(String))
     business_type = Column(ARRAY(String))
     comments = Column(String)
 
-    @validates('business_model', 'constitution_location', 'business_type')
+    @validates('business_model', 'constitution_location', 'business_type', 'company_type')
     def empty_list_to_null(self, key, value):
         # Si el valor es una lista vacía o un string que representa una lista vacía, devuelve None
         if isinstance(value, list) and len(value) == 0:
