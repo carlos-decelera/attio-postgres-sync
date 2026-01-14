@@ -178,7 +178,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
     event = events[0]
     
     # 1. Log inmediato de recepción
-    logger.info(f"📩 Recibido: {event.get('event_type')} | ID: {event.get('id', {}).get('record_id') or event.get('id', {}).get('entry_id')}")
+    logger.info(f"📩 Recibido: {event.get('event_type')} | ID: {event.get('id', {}).get('record_id') or event.get('id', {}).get('entry_id')} | Actor: {event.get('actor', {}).get('type')} |")
 
     # 2. Seguridad básica
     if event.get("actor", {}).get("type") != "workspace-member":
