@@ -80,7 +80,7 @@ async def process_attio_event(event: dict):
                     "name": safe_get(vals, "name"),
                     "domains": safe_get(vals, "domains", "domain"),
                     "created_at": safe_get(vals, "created_at"),
-                    "stage": safe_get(vals, "stage_$startup", "option"),
+                    "stage": safe_get(vals, "stage", "option"),
                     "one_liner": safe_get(vals, "one_liner"),
                     "round_size": safe_get(vals, "round_size"),
                     "current_valuation": safe_get(vals, "current_valuation"),
