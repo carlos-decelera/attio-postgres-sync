@@ -73,6 +73,7 @@ async def process_attio_event(event: dict):
                 b_model = [i.get("option", {}).get("title") for i in vals.get("business_model_4", []) if i.get("option")]
                 c_loc = [i.get("option", {}).get("title") for i in vals.get("constitution_location_8", []) if i.get("option")]
                 b_type = [i.get("option", {}).get("title") for i in vals.get("business_type", []) if i.get("option")]
+                stage = [i.get("option", {}).get("title") for i in vals.get("stage", []) if i.get("option")]
 
                 c_map = {
                     "id_attio": rid,
@@ -80,7 +81,6 @@ async def process_attio_event(event: dict):
                     "domains": safe_get(vals, "domains", "domain"),
                     "created_at": safe_get(vals, "created_at"),
                     "one_liner": safe_get(vals, "one_liner"),
-                    "stage": safe_get(vals, "stage", "option"),
                     "round_size": safe_get(vals, "round_size"),
                     "current_valuation": safe_get(vals, "current_valuation"),
                     "deck_url": safe_get(vals, "deck_url"),
@@ -91,6 +91,7 @@ async def process_attio_event(event: dict):
                     "company_type": safe_get(vals, "company_type_4", "option"),
                     "fund": safe_get(vals, "fund_7", "option"),
                     "business_model": b_model if b_model else None,
+                    "stage": stage if stage else None,
                     "constitution_location": c_loc if c_loc else None,
                     "business_type": b_type if b_type else None,
                     "comments": safe_get(vals, "comments")
