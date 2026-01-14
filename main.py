@@ -182,7 +182,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
     logger.info(f"📩 Recibido: {event.get('event_type')} | ID: {event.get('id', {}).get('record_id') or event.get('id', {}).get('entry_id')} | Actor: {event.get('actor', {}).get('type')} |")
 
     # 2. Seguridad básica
-    if event.get("actor", {}).get("type") != "workspace-member":
+    if event.get("actor", {}).get("type") not in ["workspace-member", "attio-token"]:
         return {"status": "ignored", "reason": "not workspace member"}
 
     # 3. ENCOLAR TAREA Y RESPONDER YA
