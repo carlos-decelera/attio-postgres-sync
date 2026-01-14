@@ -39,7 +39,7 @@ class Company(Base):
     business_type = Column(ARRAY(String))
     comments = Column(String)
 
-    @validates('business_model', 'constitution_location', 'business_type')
+    @validates('business_model', 'constitution_location', 'business_type', 'stage')
     def empty_list_to_null(self, key, value):
         # Si el valor es una lista vacía o un string que representa una lista vacía, devuelve None
         if isinstance(value, list) and len(value) == 0:
