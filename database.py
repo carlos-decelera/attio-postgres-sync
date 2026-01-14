@@ -24,7 +24,7 @@ class Company(Base):
     domains = Column(String)
     created_at = Column(DateTime)
     one_liner = Column(String)
-    stage = Column(ARRAY(String))
+    stage = Column(String)
     round_size = Column(BigInteger)
     current_valuation = Column(BigInteger)
     deck_url = Column(String)
@@ -39,7 +39,7 @@ class Company(Base):
     business_type = Column(ARRAY(String))
     comments = Column(String)
 
-    @validates('business_model', 'constitution_location', 'business_type', 'stage')
+    @validates('business_model', 'constitution_location', 'business_type')
     def empty_list_to_null(self, key, value):
         # Si el valor es una lista vacía o un string que representa una lista vacía, devuelve None
         if isinstance(value, list) and len(value) == 0:

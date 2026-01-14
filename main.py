@@ -80,6 +80,7 @@ async def process_attio_event(event: dict):
                     "name": safe_get(vals, "name"),
                     "domains": safe_get(vals, "domains", "domain"),
                     "created_at": safe_get(vals, "created_at"),
+                    "stage": safe_get(vals, "stage_$startup", "option"),
                     "one_liner": safe_get(vals, "one_liner"),
                     "round_size": safe_get(vals, "round_size"),
                     "current_valuation": safe_get(vals, "current_valuation"),
@@ -91,7 +92,6 @@ async def process_attio_event(event: dict):
                     "company_type": safe_get(vals, "company_type_4", "option"),
                     "fund": safe_get(vals, "fund_7", "option"),
                     "business_model": b_model if b_model else None,
-                    "stage": stage if stage else None,
                     "constitution_location": c_loc if c_loc else None,
                     "business_type": b_type if b_type else None,
                     "comments": safe_get(vals, "comments")
