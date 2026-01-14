@@ -24,7 +24,7 @@ class Company(Base):
     domains = Column(String)
     created_at = Column(DateTime)
     one_liner = Column(String)
-    stage = Column(Array(String))
+    stage = Column(ARRAY(String))
     round_size = Column(BigInteger)
     current_valuation = Column(BigInteger)
     deck_url = Column(String)
